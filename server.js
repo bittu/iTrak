@@ -25,6 +25,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(errorHandler());
 app.set('views', __dirname + '/public/');
 
+app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'html');
+
 // cookieParser should be above session
 app.use(cookieParser());
 
