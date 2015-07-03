@@ -1,0 +1,33 @@
+{
+  "name": "iTrak",
+  "version": "1.0.0",
+  "authors": [
+    "Sandeep Vemula"
+  ],
+  "description": "Issue tracker",
+  "keywords": [
+    "issues",
+    "tracker",
+    "nodejs",
+    "mongodb",
+    "angularjs",
+    "expressjs"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "public/libs",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-material": "~0.10.0",
+    "angular-sanitize": "~1.4.1",
+    "angular-resource": "~1.4.1",
+    "angular-cookies": "~1.4.1",
+    "angular-route": "~1.4.1",
+    "angular-http-auth": "~1.2.2"
+  }
+}
