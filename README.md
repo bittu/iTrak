@@ -6,3 +6,16 @@ Issue tracker done with MEAN stack
 * https://github.com/fnakstad/angular-client-side-auth
 * https://github.com/DaftMonk/angular-passport
 * https://github.com/angular/material-start
+
+Admin:
+
+{
+    "_id" : ObjectId("55994fa557de5b5545b387ec"),
+    "userid" : 1000,
+    "password" : "$2a$08$yExr0V0AMh.AXEljP2N.POuiGSdkp4pE.0RwX.evuznnxVDRY4r.O",
+    "email" : "admin@admin.com",
+    "firstName" : "Admin",
+    "lastName" : "Admin",
+    "dob" : "01-01-1988",
+    "isAdmin" : true
+}
