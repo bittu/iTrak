@@ -4,6 +4,8 @@
   "description": "Issue Tracker",
   "main": "server.js",
   "scripts": {
+  	"install": "bower install",
+  	"start": "nodemon server",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -35,5 +37,9 @@
     "passport": "^0.2.2",
     "passport-local": "^1.0.0",
     "underscore": "^1.8.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bittu/iTrak"
   }
 }

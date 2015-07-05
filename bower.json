@@ -28,6 +28,7 @@
     "angular-resource": "~1.4.1",
     "angular-cookies": "~1.4.1",
     "angular-route": "~1.4.1",
-    "angular-http-auth": "~1.2.2"
+    "angular-http-auth": "~1.2.2",
+    "hammerjs": "~2.0.4"
   }
 }

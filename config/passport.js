@@ -32,13 +32,14 @@ passport.use(new LocalStrategy({
           }
         });
       }
-      if (!user.authenticate(password)) {
+      if (!user.comparePassword(password)) {
         return done(null, false, {
           'errors': {
             'password': { type: 'Userid or Password is incorrect.' }
           }
         });
       }
+      console.log(user);
       return done(null, user);
     });
   }

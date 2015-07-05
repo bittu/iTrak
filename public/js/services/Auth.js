@@ -2,6 +2,7 @@
 
 angular.module('iTrakApp')
     .factory('Auth', function Auth($location, $rootScope, Session, User, $cookieStore) {
+        console.log("auth")
         $rootScope.currentUser = $cookieStore.get('user') || null;
         $cookieStore.remove('user');
 

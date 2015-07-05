@@ -6,20 +6,22 @@ angular.module('iTrakApp', [
   'ngSanitize',
   'ngRoute',
   'http-auth-interceptor',
-  'ngMaterial '
+  'ngMaterial'
 ])
 
 .config(function ($routeProvider, $locationProvider) {
+    console.log("config")
     $routeProvider
-        .when('/login', {
-            templateUrl: 'views/login.html',
+        .when('/', {
+            templateUrl: '/views/login.html',
             controller: 'LoginCtrl'
         })
-        .when('/', {
-            controller: 'MainCtrl'
+        .when('/login', {
+            templateUrl: '/views/login.html',
+            controller: 'LoginCtrl'
         })
         .when('/adminDashboard', {
-            templateUrl: 'views/adminDashboard.html',
+            templateUrl: '/views/adminDashboard.html',
             controller: 'AdminDashboardCtrl'
         })
         .when('/adminDashboard/users', {
@@ -33,23 +35,28 @@ angular.module('iTrakApp', [
         .when('/dashboard', {
             templateUrl: 'views/dashboard.html',
             controller: 'DashboardCtrl'
-        })
+        })/*
         .when('/blogs/:blogId', {
             templateUrl: 'partials/blogs/view.html',
             controller: 'BlogsCtrl'
-        })
+        })*/
         .otherwise({
             redirectTo: '/'
         });
     $locationProvider.html5Mode(true);
 })
     .run(function ($rootScope, $location, Auth) {
-
+        console.log("klsdhfsdjfh11111")
         //watching the value of the currentUser variable.
         $rootScope.$watch('currentUser', function (currentUser) {
             // if no currentUser and on a page that requires authorization then try to update it
             // will trigger 401s if user does not have a valid session
+            console.log(currentUser)
+            console.log($location.path())
+            console.log(!currentUser)
+            console.log((['/', '/login'].indexOf($location.path()) == -1))
             if (!currentUser && (['/', '/login'].indexOf($location.path()) == -1)) {
+                console.log(Auth)
                 Auth.currentUser();
             }
         });
