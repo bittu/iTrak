@@ -13,8 +13,8 @@ angular.module('iTrakApp', [
     console.log("config")
     $routeProvider
         .when('/', {
-            templateUrl: '/views/login.html',
-            controller: 'LoginCtrl'
+            templateUrl: '/views/main.html',
+            controller: 'MainCtrl'
         })
         .when('/login', {
             templateUrl: '/views/login.html',
@@ -35,14 +35,15 @@ angular.module('iTrakApp', [
         .when('/dashboard', {
             templateUrl: 'views/dashboard.html',
             controller: 'DashboardCtrl'
-        })/*
+        })
+    /*
         .when('/blogs/:blogId', {
             templateUrl: 'partials/blogs/view.html',
             controller: 'BlogsCtrl'
         })*/
-        .otherwise({
-            redirectTo: '/'
-        });
+    .otherwise({
+        redirectTo: '/'
+    });
     $locationProvider.html5Mode(true);
 })
     .run(function ($rootScope, $location, Auth) {
@@ -51,10 +52,6 @@ angular.module('iTrakApp', [
         $rootScope.$watch('currentUser', function (currentUser) {
             // if no currentUser and on a page that requires authorization then try to update it
             // will trigger 401s if user does not have a valid session
-            console.log(currentUser)
-            console.log($location.path())
-            console.log(!currentUser)
-            console.log((['/', '/login'].indexOf($location.path()) == -1))
             if (!currentUser && (['/', '/login'].indexOf($location.path()) == -1)) {
                 console.log(Auth)
                 Auth.currentUser();
