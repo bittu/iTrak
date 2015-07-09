@@ -7,8 +7,12 @@ var users = {
      */
 
     getAll: function (req, res) {
-        var query = User.find();
+        var query = User.find({
+            "isAdmin": false
+        });
         query.sort('userId');
+        query.populate('projects');
+        query.select('-password');
         query.exec(function (err, users) {
             if (err) {
                 console.log(err);
@@ -44,6 +48,7 @@ var users = {
             return res.send(400);
         }
 
+        console.log(user)
         var userEntry = new User();
         userEntry.userId = user.userId;
         userEntry.email = user.email;
@@ -54,6 +59,7 @@ var users = {
         userEntry.password = user.userId + '@' + user.lastName;
         userEntry.projects = user.projects;
 
+        console.log(userEntry)
         userEntry.save(function (err) {
             if (err) {
                 console.log(err);
@@ -78,11 +84,11 @@ var users = {
         userUpdate.lastName = user.lastName;
         userUpdate.dob = user.dob;
         userUpdate.updated = Date.now();
-        userEntry.projects = user.projects;
+        userUpdate.projects = user.projects;
 
         User.update({
             _id: id
-        }, userUpdate, function (err, count, user) {
+        }, userUpdate, function (err, count) {
             if (err) {
                 console.log(err);
                 return res.send(400, 'Error udpating user: ' + user.userId);

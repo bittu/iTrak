@@ -11,11 +11,11 @@ Admin:
 
 {
     "_id" : ObjectId("55994fa557de5b5545b387ec"),
-    "userid" : 1000,
+    "userId" : 1000,
     "password" : "$2a$08$yExr0V0AMh.AXEljP2N.POuiGSdkp4pE.0RwX.evuznnxVDRY4r.O",
     "email" : "admin@admin.com",
     "firstName" : "Admin",
     "lastName" : "Admin",
-    "dob" : "01-01-1988",
+    "dob" : 567973800000,
     "isAdmin" : true
 }

@@ -1,3 +1,3 @@
 module.exports = {
-    secret: 'super.secret.superest.secret'
+    secretToken: 'super.secret.superest.secret'
 }

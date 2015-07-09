@@ -1,12 +1,11 @@
 var jwt = require('jsonwebtoken'),
     User = require('../models/User'),
     crypto = require('crypto'),
-    level = require('level'),
     secret = require('../config/secret');
 
-var db = require('../config/leveldb');
+var db = require('../config/leveldb').db;
 
-var TOKEN_EXPIRATION = 1,
+var TOKEN_EXPIRATION = 60,
     GUID_LENGTH = 12
 
 
@@ -14,6 +13,7 @@ var auth = {
     login: function (req, res) {
         var userId = req.body.userId || '',
             password = req.body.password || '';
+        console.log(req.body);
 
         if (userId === '' || password === '') {
             res.status(401);
@@ -33,9 +33,23 @@ var auth = {
             }
 
             if (user == undefined) {
-                return res.send(401);
+                res.status(401);
+                res.json({
+                    "status": 401,
+                    "message": "Invalid credentials no user"
+                });
+                return;
             }
 
+            /* if(!user.comparePassword(password)) {
+                res.status(401);
+                res.json({
+                    "status": 401,
+                    "message": "Invalid credentials password wrong"
+                });
+                return;
+            }
+            */
             user.comparePassword(password, function (isMatch) {
                 if (!isMatch) {
                     console.log("Attempt failed to login with " + user.username);
@@ -48,7 +62,7 @@ var auth = {
                     expiresInMinutes: TOKEN_EXPIRATION
                 });*/
 
-                var token = generateAndStoreToken();
+                var token = generateAndStoreToken(req);
 
                 return res.json({
                     token: token,
@@ -68,23 +82,25 @@ function generateGUID() {
         .replace(/\//g, '0'); // replace '/' with '0'
 }
 
-function generateToken(GUID) {
+function generateToken(req, GUID) {
     var token = jwt.sign({
         auth: GUID,
-        agent: req.headers['user-agent']
+        user: req.body.userId
     }, secret.secretToken, {
         expiresInMinutes: TOKEN_EXPIRATION
     });
     return token;
 }
 
-function generateAndStoreToken(req, opts) {
+function generateAndStoreToken(req) {
     var GUID = generateGUID();
-    var token = generateToken(req, GUID, opts);
+    var token = generateToken(req, GUID);
+    console.log(jwt.decode(token, secret.secretToken))
     var record = {
         "valid": true,
         "created": new Date().getTime()
     };
+    console.log(db)
 
     db.put(GUID, JSON.stringify(record), function (err) {
         if (err) {

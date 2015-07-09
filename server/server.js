@@ -3,7 +3,8 @@ var express = require('express'),
     logger = require('morgan'),
     bodyParser = require('body-parser');
 
-var app = express();
+var app = express(),
+    db = require('./config/mongodb').db;
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
