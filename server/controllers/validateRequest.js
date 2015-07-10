@@ -16,6 +16,9 @@ module.exports = function (req, res, next) {
         if (!decoded || !decoded.auth) {
             return res.json(403, 'Not authorized');
         }
+        if (req.url.indexOf('admin') !== -1 && !decoded.isAdmin) {
+            return res.json(403, 'Not authorized');
+        }
         // check if a key exists, else import word list:
         db.get(decoded.auth, function (err, record) {
             var r;

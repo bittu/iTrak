@@ -62,11 +62,11 @@ var auth = {
                     expiresInMinutes: TOKEN_EXPIRATION
                 });*/
 
-                var token = generateAndStoreToken(req);
+                var token = generateAndStoreToken(req, user);
 
                 return res.json({
                     token: token,
-                    user: user.profile
+                    user: user
                 });
             });
 
@@ -82,19 +82,20 @@ function generateGUID() {
         .replace(/\//g, '0'); // replace '/' with '0'
 }
 
-function generateToken(req, GUID) {
+function generateToken(req, GUID, user) {
     var token = jwt.sign({
         auth: GUID,
-        user: req.body.userId
+        user: user.userId,
+        isAdmin: user.isAdmin
     }, secret.secretToken, {
         expiresInMinutes: TOKEN_EXPIRATION
     });
     return token;
 }
 
-function generateAndStoreToken(req) {
+function generateAndStoreToken(req, user) {
     var GUID = generateGUID();
-    var token = generateToken(req, GUID);
+    var token = generateToken(req, GUID, user);
     console.log(jwt.decode(token, secret.secretToken))
     var record = {
         "valid": true,

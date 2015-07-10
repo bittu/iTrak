@@ -208,7 +208,7 @@ var users = {
                 return res.send(400);
             }
 
-            return res.json(200, user.userProfile);
+            return res.json(200, user);
         });
     }
 }

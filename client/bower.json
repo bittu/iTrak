@@ -1,0 +1,30 @@
+{
+  "name": "iTrak",
+  "version": "1.0.0",
+  "homepage": "https://github.com/bittu/iTrak",
+  "authors": [
+    "Sandeep Vemula <vsandeep414@gmail.com>"
+  ],
+  "description": "issue tracker with MEAN",
+  "keywords": [
+    "issue",
+    "tracker",
+    "angular",
+    "mean",
+    "material"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "public/libs",
+    "test",
+    "tests",
+    "libs"
+  ],
+  "dependencies": {
+    "angular-material": "~0.10.0",
+    "angular-route": "~1.4.2"
+  }
+}
