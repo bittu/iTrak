@@ -46,26 +46,41 @@ angular.module('iTrakApp', ['ngRoute', 'ngMaterial'])
             if ((nextRoute.access && nextRoute.access.requiredLogin) && !AuthenticationFactory.isLogged) {
                 $location.path("/login");
             } else {
-                if (nextRoute.access.adminRequired && !AuthenticationFactory.isAdmin) {
+                console.log(nextRoute)
+                if (nextRoute.access && nextRoute.access.adminRequired && !AuthenticationFactory.isAdmin) {
                     AuthenticationFactory.isLogged = false;
                     $location.path("/login");
                 } else {
                     // check if user object exists else fetch it. This is incase of a page refresh
                     if (!AuthenticationFactory.user) AuthenticationFactory.user = $window.sessionStorage.user;
                     if (!AuthenticationFactory.isAdmin) AuthenticationFactory.isAdmin = $window.sessionStorage.isAdmin;
+                    console.log(AuthenticationFactory)
+                    if (AuthenticationFactory.isLogged && ($location.path() === '/login' || $location.path() === '/')) {
+                        console.log(AuthenticationFactory)
+                        if (AuthenticationFactory.isAdmin) {
+                            $location.path('/adminDashboard');
+                        } else {
+                            $location.path('/dashboard');
+                        }
+                    } else {
+                        if(AuthenticationFactory.isAdmin && nextRoute.access && !nextRoute.access.adminRequired && $location.path() !== '/adminDashboard') {
+                            $location.path('/adminDashboard');
+                        }
+                    }
                 }
             }
         });
 
-        $rootScope.$on('$routeChangeSuccess', function (event, nextRoute, currentRoute) {
+       /* $rootScope.$on('$routeChangeSuccess', function (event, nextRoute, currentRoute) {
             $rootScope.showMenu = AuthenticationFactory.isLogged;
             // if the user is already logged in, take him to the home page
             if (AuthenticationFactory.isLogged && ($location.path() === '/login' || $location.path() === '/')) {
+                console.log(AuthenticationFactory)
                 if (AuthenticationFactory.isAdmin) {
                     $location.path('/adminDashboard');
                 } else {
                     $location.path('/dashboard');
                 }
             }
-        });
+        });*/
     });

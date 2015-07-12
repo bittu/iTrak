@@ -14,12 +14,12 @@ angular.module('iTrakApp')
 
         return auth;
     })
-    .factory('UserAuthFactory', ['DOMAIN', 'API',
+    .factory('UserAuthFactory', ['DOMAIN', 'API', '$window', '$location', '$http', 'AuthenticationFactory',
         function (DOMAIN, API, $window, $location, $http, AuthenticationFactory) {
             return {
                 login: function (userId, password) {
                     return $http.post(DOMAIN + API.LOGIN, {
-                        username: userId,
+                        userId: userId,
                         password: password
                     });
                 },

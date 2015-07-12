@@ -7,15 +7,8 @@ Issue tracker done with MEAN stack
 * https://github.com/angular/material-start
 * http://thejackalofjavascript.com/architecting-a-restful-node-js-app/
 * https://github.com/docdis/learn-json-web-tokens
+* http://codepen.io/kyleledbetter/pen/gbQOaV
+
 Admin:
 
-{
-    "_id" : ObjectId("55994fa557de5b5545b387ec"),
-    "userId" : 1000,
-    "password" : "$2a$08$yExr0V0AMh.AXEljP2N.POuiGSdkp4pE.0RwX.evuznnxVDRY4r.O",
-    "email" : "admin@admin.com",
-    "firstName" : "Admin",
-    "lastName" : "Admin",
-    "dob" : 567973800000,
-    "isAdmin" : true
-}
+{"userId" : 1000,"password" : "$2a$08$yExr0V0AMh.AXEljP2N.POuiGSdkp4pE.0RwX.evuznnxVDRY4r.O","email" : "admin@admin.com","firstName" : "Admin","lastName" : "Admin","dob" : 567973800000,"isAdmin" : true}

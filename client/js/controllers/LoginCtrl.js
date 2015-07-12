@@ -22,6 +22,7 @@ angular.module('iTrakApp')
 
                     }).error(function (status) {
                         alert('Oops something went wrong!');
+                        console.log(status)
                     });
                 } else {
                     alert('Invalid credentials');
