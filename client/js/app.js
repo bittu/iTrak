@@ -8,7 +8,7 @@ angular.module('iTrakApp', ['ngRoute', 'ngMaterial'])
         $routeProvider
             .when('/login', {
                 templateUrl: 'partials/login.html',
-                controller: 'LoginCtrl',
+                controller: 'loginCtrl',
                 access: {
                     requiredLogin: false,
                     adminRequired: false
@@ -63,7 +63,7 @@ angular.module('iTrakApp', ['ngRoute', 'ngMaterial'])
                             $location.path('/dashboard');
                         }
                     } else {
-                        if(AuthenticationFactory.isAdmin && nextRoute.access && !nextRoute.access.adminRequired && $location.path() !== '/adminDashboard') {
+                        if (AuthenticationFactory.isAdmin && nextRoute.access && !nextRoute.access.adminRequired && $location.path() !== '/adminDashboard') {
                             $location.path('/adminDashboard');
                         }
                     }
@@ -71,7 +71,7 @@ angular.module('iTrakApp', ['ngRoute', 'ngMaterial'])
             }
         });
 
-       /* $rootScope.$on('$routeChangeSuccess', function (event, nextRoute, currentRoute) {
+        /* $rootScope.$on('$routeChangeSuccess', function (event, nextRoute, currentRoute) {
             $rootScope.showMenu = AuthenticationFactory.isLogged;
             // if the user is already logged in, take him to the home page
             if (AuthenticationFactory.isLogged && ($location.path() === '/login' || $location.path() === '/')) {

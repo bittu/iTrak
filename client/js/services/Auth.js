@@ -27,6 +27,8 @@ angular.module('iTrakApp')
 
                     if (AuthenticationFactory.isLogged) {
 
+                        $http.post(DOMAIN + API.LOGOUT);
+
                         AuthenticationFactory.isLogged = false;
                         delete AuthenticationFactory.user;
                         delete AuthenticationFactory.isAdmin;

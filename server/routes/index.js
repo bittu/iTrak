@@ -7,6 +7,7 @@ var auth = require('../controllers/auth'),
 
 //Auth
 router.post('/login', auth.login);
+router.post('/logout', auth.logout);
 
 //Users - Admin
 router.get('/api/admin/users', users.getAll);

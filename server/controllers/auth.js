@@ -71,6 +71,34 @@ var auth = {
             });
 
         });
+    },
+
+    logout: function (req, res) {
+        // invalidate the token
+        var token = req.headers.authorization;
+        console.log(' >>> ', token)
+        jwt.verify(token, secret.secretToken, function (err, decoded) {
+            if (err) {
+                res.status(401);
+                res.json({
+                    "status": 401,
+                    "message": "Invalid token"
+                });
+                return;
+            }
+
+            // asynchronously read and invalidate
+            db.get(decoded.auth, function (err, record) {
+                var updated = JSON.parse(record);
+                updated.valid = false;
+                db.put(decoded.auth, updated, function (err) {
+                    console.log('updated: ', updated)
+                    return res.status(200).json({
+                        "message": "Logged out!!"
+                    });
+                });
+            });
+        });
     }
 }
 
