@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('iTrakApp', ['ngRoute', 'ngMaterial'])
+angular.module('iTrakApp', ['ngRoute', 'ngMaterial', 'ngMdIcons'])
     .config(function ($routeProvider, $httpProvider) {
 
         $httpProvider.interceptors.push('TokenInterceptor');
@@ -47,14 +47,18 @@ angular.module('iTrakApp', ['ngRoute', 'ngMaterial'])
                 $location.path("/login");
             } else {
                 console.log(nextRoute)
+                // check if user object exists else fetch it. This is incase of a page refresh
+                if (!AuthenticationFactory.user) AuthenticationFactory.user = JSON.parse($window.sessionStorage.user);
+                if (!AuthenticationFactory.isAdmin) AuthenticationFactory.isAdmin = $window.sessionStorage.isAdmin;
                 if (nextRoute.access && nextRoute.access.adminRequired && !AuthenticationFactory.isAdmin) {
                     AuthenticationFactory.isLogged = false;
                     $location.path("/login");
                 } else {
-                    // check if user object exists else fetch it. This is incase of a page refresh
-                    if (!AuthenticationFactory.user) AuthenticationFactory.user = $window.sessionStorage.user;
-                    if (!AuthenticationFactory.isAdmin) AuthenticationFactory.isAdmin = $window.sessionStorage.isAdmin;
+
                     console.log(AuthenticationFactory)
+                    console.log($location.path())
+                    console.log($location)
+                    console.log($location.url());
                     if (AuthenticationFactory.isLogged && ($location.path() === '/login' || $location.path() === '/')) {
                         console.log(AuthenticationFactory)
                         if (AuthenticationFactory.isAdmin) {
