@@ -8,6 +8,7 @@ Issue tracker done with MEAN stack
 * http://thejackalofjavascript.com/architecting-a-restful-node-js-app/
 * https://github.com/docdis/learn-json-web-tokens
 * http://codepen.io/kyleledbetter/pen/gbQOaV
+* https://klarsys.github.io/angular-material-icons/
 
 Admin:
 
