@@ -15,7 +15,7 @@ angular.module('iTrakApp')
                         AuthenticationFactory.isAdmin = data.user.isAdmin;
 
                         $window.sessionStorage.token = data.token;
-                        $window.sessionStorage.user = data.user; // to fetch the user details on refresh
+                        $window.sessionStorage.user = JSON.stringify(data.user); // to fetch the user details on refresh
                         $window.sessionStorage.isAdmin = data.user.isAdmin; // to fetch the user details on refresh
 
                         $location.path("/");

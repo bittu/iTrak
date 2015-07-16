@@ -1,6 +1,6 @@
 angular.module('iTrakApp')
-    .controller('adminDashboardCtrl', ['$scope', 'AuthenticationFactory',
-        function ($scope, AuthenticationFactory) {
+    .controller('adminDashboardCtrl',
+        function ($scope, AuthenticationFactory, $mdUtil, $mdSidenav, $log) {
             console.log($scope + ' - adminDashboardCtrl');
             $scope.user = AuthenticationFactory.user;
             $scope.menu = [{
@@ -17,4 +17,15 @@ angular.module('iTrakApp')
                 icon: 'project'
             }];
 
-        }]);
+            $scope.toggleSidenav = function (navId) {
+                $mdSidenav(navId)
+                    .toggle()
+                    .then(function () {
+                        $log.debug("toggle " + navId + " is done");
+                    });
+            }
+            $scope.changeView = function (view) {
+                $log.log(view)
+            }
+
+        });

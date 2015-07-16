@@ -2,6 +2,7 @@ angular.module('iTrakApp')
     .factory('AuthenticationFactory', function ($window) {
         var auth = {
             isLogged: false,
+            isAdmin: false,
             check: function () {
                 if ($window.sessionStorage.token && $window.sessionStorage.user && $window.sessionStorage.isAdmin) {
                     this.isLogged = true;

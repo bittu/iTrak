@@ -9,6 +9,8 @@ Issue tracker done with MEAN stack
 * https://github.com/docdis/learn-json-web-tokens
 * http://codepen.io/kyleledbetter/pen/gbQOaV
 * https://klarsys.github.io/angular-material-icons/
+* https://github.com/artgon/angularjs-role-based-auth
+* http://xebee.xebia.in/index.php/2014/08/02/angularjs-role-based-access-on-gui/
 
 Admin:
 
