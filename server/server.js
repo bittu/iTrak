@@ -9,7 +9,7 @@ var app = express(),
 app.use(logger('dev'));
 app.use(bodyParser.json());
 
-app.all('/*', function (req, res, next) {
+app.all('*', function (req, res, next) {
     //CORS Headers
     res.header("Access-Control-Allow-Origin", "*"); // restrict it to the required domain
     res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');

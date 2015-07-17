@@ -1,11 +1,38 @@
 angular.module('iTrakApp')
-    .factory('AuthenticationFactory', function ($window) {
+    .factory('AuthenticationFactory', function ($window, $rootScope) {
         var auth = {
             isLogged: false,
             isAdmin: false,
             check: function () {
-                if ($window.sessionStorage.token && $window.sessionStorage.user && $window.sessionStorage.isAdmin) {
+                if ($window.sessionStorage.token && $window.sessionStorage.user) {
                     this.isLogged = true;
+                    $rootScope.user = JSON.parse($window.sessionStorage.user);
+                    console.log($window.sessionStorage.user);
+                    if ($window.sessionStorage.isAdmin) {
+                        $rootScope.menu = [{
+                            view: 'adminDashboard',
+                            title: 'Dashboard',
+                            icon: 'dashboard'
+                                            }, {
+                            view: 'usersAdmin',
+                            title: 'Users',
+                            icon: 'user'
+                                            }, {
+                            view: 'projectsAdmin',
+                            title: 'Projects',
+                            icon: 'project'
+                                            }];
+                    } else {
+                        $rootScope.menu = [{
+                            view: 'dashboard',
+                            title: 'Dashboard',
+                            icon: 'dashboard'
+                        }, {
+                            view: 'profile',
+                            title: 'Profile',
+                            icon: 'profile'
+                        }];
+                    }
                 } else {
                     this.isLogged = false;
                     delete this.user;

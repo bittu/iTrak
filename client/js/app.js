@@ -1,5 +1,5 @@
 'use strict';
-
+/*
 angular.module('iTrakApp', ['ngRoute', 'ngMaterial', 'ngMdIcons'])
     .config(function ($routeProvider, $httpProvider) {
 
@@ -13,14 +13,28 @@ angular.module('iTrakApp', ['ngRoute', 'ngMaterial', 'ngMdIcons'])
                     requiredLogin: false,
                     adminRequired: false
                 }
-            }).when('/adminDashboard', {
+            }).when('/:id/adminDashboard', {
                 templateUrl: 'partials/adminDashboard.html',
                 controller: 'adminDashboardCtrl',
                 access: {
                     requiredLogin: true,
                     adminRequired: true
                 }
-            }).when('/dashboard', {
+            }).when('/:id/usersAdmin', {
+                templateUrl: 'partials/usersAdmin.html',
+                controller: 'usersAdminCtrl',
+                access: {
+                    requiredLogin: true,
+                    adminRequired: true
+                }
+            }).when('/:id/projectsAdmin', {
+                templateUrl: 'partials/projectsAdmin.html',
+                controller: 'projectsAdminCtrl',
+                access: {
+                    requiredLogin: true,
+                    adminRequired: true
+                }
+            }).when('/:id/dashboard', {
                 templateUrl: 'partials/dashboard.html',
                 controller: 'dashboardCtrl',
                 access: {
@@ -38,6 +52,7 @@ angular.module('iTrakApp', ['ngRoute', 'ngMaterial', 'ngMdIcons'])
                 redirectTo: '/login'
             });
     })
+
     .run(function ($rootScope, $window, $location, AuthenticationFactory) {
         // when the page refreshes, check if the user is already logged in
         AuthenticationFactory.check();
@@ -62,20 +77,20 @@ angular.module('iTrakApp', ['ngRoute', 'ngMaterial', 'ngMdIcons'])
                     if (AuthenticationFactory.isLogged && ($location.path() === '/login' || $location.path() === '/')) {
                         console.log(AuthenticationFactory)
                         if (AuthenticationFactory.isAdmin) {
-                            $location.path('/adminDashboard');
+                            $location.path('/' + AuthenticationFactory.user._id + '/adminDashboard');
                         } else {
-                            $location.path('/dashboard');
+                            $location.path('/' + AuthenticationFactory.user._id + '/dashboard');
                         }
                     } else {
-                        if (AuthenticationFactory.isAdmin && nextRoute.access && !nextRoute.access.adminRequired && $location.path() !== '/adminDashboard') {
-                            $location.path('/adminDashboard');
+                        if (AuthenticationFactory.isAdmin && nextRoute.access && !nextRoute.access.adminRequired && $location.path().indexOf('/adminDashboard') === -1) {
+                            $location.path('/' + AuthenticationFactory.user._id + '/adminDashboard');
                         }
                     }
                 }
             }
         });
 
-        /* $rootScope.$on('$routeChangeSuccess', function (event, nextRoute, currentRoute) {
+         $rootScope.$on('$routeChangeSuccess', function (event, nextRoute, currentRoute) {
             $rootScope.showMenu = AuthenticationFactory.isLogged;
             // if the user is already logged in, take him to the home page
             if (AuthenticationFactory.isLogged && ($location.path() === '/login' || $location.path() === '/')) {
@@ -86,5 +101,51 @@ angular.module('iTrakApp', ['ngRoute', 'ngMaterial', 'ngMdIcons'])
                     $location.path('/dashboard');
                 }
             }
-        });*/
+        });
+}); */
+
+angular.module('iTrakApp', ['ngRoute', 'ngMaterial', 'ngMdIcons', 'ui.router'])
+    .config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
+        $urlRouterProvider.otherwise('/login');
+
+        $stateProvider
+            .state('login ', {
+                url: '/login ',
+                templateUrl: 'partials/login.html ',
+                controller: 'loginCtrl '
+            })
+
+        .state('adminDashboard ', {
+            url: '/:id/adminDashboard ',
+            templateUrl: 'partials/adminDashboard.html ',
+            views: {
+                'sideNav@adminDashboard ': {
+                    templateUrl: 'partials / sideNav.html ',
+                    controller: 'sideNavCtrl '
+                }
+            }
+        })
+            .state('adminDashboard.users ', {
+                url: '/:id/usersAdmin ',
+                templateUrl: 'partials/usersAdmin.html ',
+                controller: 'usersAdminCtrl '
+            })
+            .state('adminDashboard.projects ', {
+                url: '/:id/projectsAdmin ',
+                templateUrl: 'partials/projectsAdmin.html ',
+                controller: 'projectsAdminCtrl '
+            })
+
+        .state('dashboard ', {
+            url: '/:id/dashboard ',
+            templateUrl: 'partials/dashboard.html ',
+            controller: 'dashboardCtrl '
+        })
+    })
+
+.run(function ($rootScope, $state, AuthenticationFactory) {
+
+    $rootScope.on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
+
     });
+})

@@ -11,6 +11,8 @@ Issue tracker done with MEAN stack
 * https://klarsys.github.io/angular-material-icons/
 * https://github.com/artgon/angularjs-role-based-auth
 * http://xebee.xebia.in/index.php/2014/08/02/angularjs-role-based-access-on-gui/
+* https://github.com/code-friends/CodeFriends
+* http://stackoverflow.com/questions/28518181/angular-ui-router-how-to-prevent-access-to-a-state
 
 Admin:
 
