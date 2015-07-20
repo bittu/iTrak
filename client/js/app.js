@@ -53,37 +53,37 @@ angular.module('iTrakApp', ['ngRoute', 'ngMaterial', 'ngMdIcons'])
             });
     })
 
-    .run(function ($rootScope, $window, $location, AuthenticationFactory) {
+    .run(function ($rootScope, $window, $location, Auth) {
         // when the page refreshes, check if the user is already logged in
-        AuthenticationFactory.check();
+        Auth.check();
 
         $rootScope.$on("$routeChangeStart", function (event, nextRoute, currentRoute) {
-            if ((nextRoute.access && nextRoute.access.requiredLogin) && !AuthenticationFactory.isLogged) {
+            if ((nextRoute.access && nextRoute.access.requiredLogin) && !Auth.isLogged) {
                 $location.path("/login");
             } else {
                 console.log(nextRoute)
                 // check if user object exists else fetch it. This is incase of a page refresh
-                if (!AuthenticationFactory.user) AuthenticationFactory.user = JSON.parse($window.sessionStorage.user);
-                if (!AuthenticationFactory.isAdmin) AuthenticationFactory.isAdmin = $window.sessionStorage.isAdmin;
-                if (nextRoute.access && nextRoute.access.adminRequired && !AuthenticationFactory.isAdmin) {
-                    AuthenticationFactory.isLogged = false;
+                if (!Auth.user) Auth.user = JSON.parse($window.sessionStorage.user);
+                if (!Auth.isAdmin) Auth.isAdmin = $window.sessionStorage.isAdmin;
+                if (nextRoute.access && nextRoute.access.adminRequired && !Auth.isAdmin) {
+                    Auth.isLogged = false;
                     $location.path("/login");
                 } else {
 
-                    console.log(AuthenticationFactory)
+                    console.log(Auth)
                     console.log($location.path())
                     console.log($location)
                     console.log($location.url());
-                    if (AuthenticationFactory.isLogged && ($location.path() === '/login' || $location.path() === '/')) {
-                        console.log(AuthenticationFactory)
-                        if (AuthenticationFactory.isAdmin) {
-                            $location.path('/' + AuthenticationFactory.user._id + '/adminDashboard');
+                    if (Auth.isLogged && ($location.path() === '/login' || $location.path() === '/')) {
+                        console.log(Auth)
+                        if (Auth.isAdmin) {
+                            $location.path('/' + Auth.user._id + '/adminDashboard');
                         } else {
-                            $location.path('/' + AuthenticationFactory.user._id + '/dashboard');
+                            $location.path('/' + Auth.user._id + '/dashboard');
                         }
                     } else {
-                        if (AuthenticationFactory.isAdmin && nextRoute.access && !nextRoute.access.adminRequired && $location.path().indexOf('/adminDashboard') === -1) {
-                            $location.path('/' + AuthenticationFactory.user._id + '/adminDashboard');
+                        if (Auth.isAdmin && nextRoute.access && !nextRoute.access.adminRequired && $location.path().indexOf('/adminDashboard') === -1) {
+                            $location.path('/' + Auth.user._id + '/adminDashboard');
                         }
                     }
                 }
@@ -91,11 +91,11 @@ angular.module('iTrakApp', ['ngRoute', 'ngMaterial', 'ngMdIcons'])
         });
 
          $rootScope.$on('$routeChangeSuccess', function (event, nextRoute, currentRoute) {
-            $rootScope.showMenu = AuthenticationFactory.isLogged;
+            $rootScope.showMenu = Auth.isLogged;
             // if the user is already logged in, take him to the home page
-            if (AuthenticationFactory.isLogged && ($location.path() === '/login' || $location.path() === '/')) {
-                console.log(AuthenticationFactory)
-                if (AuthenticationFactory.isAdmin) {
+            if (Auth.isLogged && ($location.path() === '/login' || $location.path() === '/')) {
+                console.log(Auth)
+                if (Auth.isAdmin) {
                     $location.path('/adminDashboard');
                 } else {
                     $location.path('/dashboard');
@@ -108,44 +108,64 @@ angular.module('iTrakApp', ['ngRoute', 'ngMaterial', 'ngMdIcons', 'ui.router'])
     .config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
         $urlRouterProvider.otherwise('/login');
 
+        var authenticated = ['$q', 'Auth',
+            function ($q, Auth) {
+                var deferred = $q.defer();
+                Auth.isLoggedIn(false)
+                    .then(function (isLoggedIn) {
+                        if (isLoggedIn) {
+                            deferred.resolve();
+                        } else {
+                            deferred.reject('Not logged in');
+                        }
+                    });
+                return deferred.promise;
+        }];
+
         $stateProvider
-            .state('login ', {
-                url: '/login ',
-                templateUrl: 'partials/login.html ',
-                controller: 'loginCtrl '
+            .state('login', {
+                url: '/login',
+                templateUrl: 'partials/login.html',
+                controller: 'loginCtrl'
             })
 
-        .state('adminDashboard ', {
-            url: '/:id/adminDashboard ',
-            templateUrl: 'partials/adminDashboard.html ',
+        .state('adminDashboard', {
+            url: '/:id/adminDashboard',
+            templateUrl: 'partials/adminDashboard.html',
             views: {
-                'sideNav@adminDashboard ': {
-                    templateUrl: 'partials / sideNav.html ',
+                'sideNav@adminDashboard': {
+                    templateUrl: 'partials/sideNav.html',
                     controller: 'sideNavCtrl '
                 }
             }
         })
-            .state('adminDashboard.users ', {
-                url: '/:id/usersAdmin ',
-                templateUrl: 'partials/usersAdmin.html ',
-                controller: 'usersAdminCtrl '
+            .state('adminDashboard.users', {
+                url: '/:id/usersAdmin',
+                templateUrl: 'partials/usersAdmin.html',
+                controller: 'usersAdminCtrl'
             })
-            .state('adminDashboard.projects ', {
-                url: '/:id/projectsAdmin ',
-                templateUrl: 'partials/projectsAdmin.html ',
-                controller: 'projectsAdminCtrl '
+            .state('adminDashboard.projects', {
+                url: '/:id/projectsAdmin',
+                templateUrl: 'partials/projectsAdmin.html',
+                controller: 'projectsAdminCtrl'
             })
 
-        .state('dashboard ', {
-            url: '/:id/dashboard ',
-            templateUrl: 'partials/dashboard.html ',
-            controller: 'dashboardCtrl '
+        .state('dashboard', {
+            url: '/:id/dashboard',
+            templateUrl: 'partials/dashboard.html',
+            controller: 'dashboardCtrl'
         })
     })
 
-.run(function ($rootScope, $state, AuthenticationFactory) {
+.run(function ($rootScope, $state, Auth) {
 
-    $rootScope.on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
-
+    $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
+        if (Auth.isLoggedIn()) {
+            if (toState.access && toState.access.adminRequired && !Auth.user.isAdmin) {
+                $state.go('dashboard');
+            }
+        } else {
+            $state.go('login');
+        }
     });
-})
+});

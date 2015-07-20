@@ -3,6 +3,6 @@
 angular.module('iTrakApp')
 
 .controller('sideNavCtrl',
-    function ($scope, AuthenticationFactory, $mdUtil, $mdSidenav, $log, $location, $rootScope) {
+    function ($scope, Auth, $mdUtil, $mdSidenav, $log, $location, $rootScope) {
 
     })

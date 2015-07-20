@@ -1,5 +1,5 @@
 angular.module('iTrakApp')
-    .factory('AuthenticationFactory', function ($window, $rootScope) {
+    .factory('Auth', function ($window, $rootScope) {
         var auth = {
             isLogged: false,
             isAdmin: false,
@@ -42,8 +42,8 @@ angular.module('iTrakApp')
 
         return auth;
     })
-    .factory('UserAuthFactory', ['DOMAIN', 'API', '$window', '$location', '$http', 'AuthenticationFactory',
-        function (DOMAIN, API, $window, $location, $http, AuthenticationFactory) {
+    .factory('UserAuthFactory', ['DOMAIN', 'API', '$window', '$location', '$http', 'Auth',
+        function (DOMAIN, API, $window, $location, $http, Auth) {
             return {
                 login: function (userId, password) {
                     return $http.post(DOMAIN + API.LOGIN, {
@@ -53,13 +53,13 @@ angular.module('iTrakApp')
                 },
                 logout: function () {
 
-                    if (AuthenticationFactory.isLogged) {
+                    if (Auth.isLogged) {
 
                         $http.post(DOMAIN + API.LOGOUT);
 
-                        AuthenticationFactory.isLogged = false;
-                        delete AuthenticationFactory.user;
-                        delete AuthenticationFactory.isAdmin;
+                        Auth.isLogged = false;
+                        delete Auth.user;
+                        delete Auth.isAdmin;
 
                         delete $window.sessionStorage.token;
                         delete $window.sessionStorage.user;

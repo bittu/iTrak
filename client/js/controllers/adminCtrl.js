@@ -3,7 +3,7 @@
 angular.module('iTrakApp')
 
 .controller('adminDashboardCtrl',
-    function ($scope, AuthenticationFactory, $mdUtil, $mdSidenav, $log, $location, $rootScope) {
+    function ($scope, Auth, $mdUtil, $mdSidenav, $log, $location, $rootScope) {
         console.log($scope + ' - adminDashboardCtrl');
 
         $scope.headerText = "Admin Dashboard";
@@ -17,13 +17,13 @@ angular.module('iTrakApp')
         }
         $scope.changeView = function (view) {
             $log.log(view)
-            $location.path('/' + AuthenticationFactory.user._id + '/' + view);
+            $location.path('/' + Auth.user._id + '/' + view);
         }
 
     })
 
 .controller('usersAdminCtrl',
-    function ($scope, AuthenticationFactory, $mdUtil, $mdSidenav, $log, $location) {
+    function ($scope, Auth, $mdUtil, $mdSidenav, $log, $location) {
 
 
 
