@@ -108,20 +108,6 @@ angular.module('iTrakApp', ['ngRoute', 'ngMaterial', 'ngMdIcons', 'ui.router'])
     .config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
         $urlRouterProvider.otherwise('/login');
 
-        var authenticated = ['$q', 'Auth',
-            function ($q, Auth) {
-                var deferred = $q.defer();
-                Auth.isLoggedIn(false)
-                    .then(function (isLoggedIn) {
-                        if (isLoggedIn) {
-                            deferred.resolve();
-                        } else {
-                            deferred.reject('Not logged in');
-                        }
-                    });
-                return deferred.promise;
-        }];
-
         $stateProvider
             .state('login', {
                 url: '/login',
@@ -132,40 +118,89 @@ angular.module('iTrakApp', ['ngRoute', 'ngMaterial', 'ngMdIcons', 'ui.router'])
         .state('adminDashboard', {
             url: '/:id/adminDashboard',
             templateUrl: 'partials/adminDashboard.html',
+            controller: 'adminDashboardCtrl',
             views: {
                 'sideNav@adminDashboard': {
                     templateUrl: 'partials/sideNav.html',
-                    controller: 'sideNavCtrl '
+                    controller: 'sideNavCtrl'
                 }
+            },
+            data: {
+                login: true,
+                admin: true
             }
         })
             .state('adminDashboard.users', {
                 url: '/:id/usersAdmin',
                 templateUrl: 'partials/usersAdmin.html',
-                controller: 'usersAdminCtrl'
+                controller: 'usersAdminCtrl',
+                data: {
+                    login: true,
+                    admin: true
+                }
             })
             .state('adminDashboard.projects', {
                 url: '/:id/projectsAdmin',
                 templateUrl: 'partials/projectsAdmin.html',
-                controller: 'projectsAdminCtrl'
+                controller: 'projectsAdminCtrl',
+                data: {
+                    login: true,
+                    admin: true
+                }
             })
 
         .state('dashboard', {
             url: '/:id/dashboard',
             templateUrl: 'partials/dashboard.html',
-            controller: 'dashboardCtrl'
+            controller: 'dashboardCtrl',
+            data: {
+                login: true,
+                admin: false
+            }
         })
     })
 
-.run(function ($rootScope, $state, Auth) {
+.run(function ($rootScope, $state, Session) {
 
     $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
-        if (Auth.isLoggedIn()) {
-            if (toState.access && toState.access.adminRequired && !Auth.user.isAdmin) {
-                $state.go('dashboard');
+        Session.check();
+        var data = toState.data;
+        console.log(toState.name + ' - ' + JSON.stringify(data))
+        console.log(Session);
+        if (toState.name === 'login') {
+            if (Session.isLogged) {
+                if (Session.isAdmin) {
+                    event.preventDefault();
+                    $state.go('adminDashboard', {
+                        id: Session.user._id
+                    }, {
+                        location: true
+                    });
+                } else {
+                    event.preventDefault();
+                    $state.go('dashboard', {
+                        id: Session.user._id
+                    });
+                }
             }
-        } else {
+        } else if (Session.isLogged) {
+            if (!Session.isAuthorized(data)) {
+                if (Session.isAdmin) {
+                    event.preventDefault();
+                    $state.go('adminDashboard', {
+                        id: Session.user._id
+                    });
+                } else {
+                    event.preventDefault();
+                    $state.go('dashboard', {
+                        id: Session.user._id
+                    });
+                }
+            }
+        } else if (toState.url.indexOf('login') === -1) {
+            event.preventDefault();
             $state.go('login');
         }
+
     });
 });

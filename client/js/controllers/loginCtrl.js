@@ -1,6 +1,6 @@
 angular.module('iTrakApp')
-    .controller('loginCtrl', ['$scope', '$window', '$state', 'UserAuthFactory', 'Auth',
-  function ($scope, $window, $state, UserAuthFactory, Auth) {
+    .controller('loginCtrl', ['$scope', '$window', '$state', 'Auth', 'Session',
+  function ($scope, $window, $state, Auth, Session) {
 
             console.log('loginCtrl')
             $scope.login = function () {
@@ -9,17 +9,15 @@ angular.module('iTrakApp')
                     password = $scope.user.password;
 
                 if (userId !== undefined && password !== undefined) {
-                    UserAuthFactory.login(userId, password).success(function (data) {
+                    Auth.login(userId, password).success(function (data) {
 
-                        Auth.isLogged = true;
-                        Auth.user = data.user;
-                        Auth.isAdmin = data.user.isAdmin;
+                        Session.create(data)
 
                         $window.sessionStorage.token = data.token;
                         $window.sessionStorage.user = JSON.stringify(data.user); // to fetch the user details on refresh
                         $window.sessionStorage.isAdmin = data.user.isAdmin; // to fetch the user details on refresh
 
-                        $state.go('/');
+                        $state.go('login');
 
                     }).error(function (status) {
                         alert('Oops something went wrong!');
