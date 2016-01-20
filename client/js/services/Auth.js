@@ -1,40 +1,40 @@
 angular.module('iTrakApp')
-    .factory('Auth', function ($http, Session, DOMAIN, API) {
+    .factory('Auth', function($http, Session, DOMAIN, API, $state) {
         return {
-            login: function (userId, password) {
+            login: function(userId, password) {
                 return $http.post(DOMAIN + API.LOGIN, {
                     userId: userId,
                     password: password
                 });
             },
-            logout: function () {
+            logout: function() {
 
                 if (Session.isLogged) {
 
-                    $http.post(DOMAIN + API.LOGOUT);
-
-                    Session.destroy();
-                    $location.path("/login");
+                    $http.post(DOMAIN + API.LOGOUT).success(function() {
+                        Session.destroy();
+                        $state.go("login");
+                    });
                 }
 
             }
         }
     })
-    .factory('Session', function ($window) {
+    .factory('Session', function($window) {
         return {
-            isAuthorized: function (data) {
+            isAuthorized: function(data) {
                 if (data.admin && this.isAdmin) return true;
                 if (!data.admin && !this.isAdmin) return true;
                 return false;
             },
-            check: function () {
+            check: function() {
                 if ($window.sessionStorage.token) {
                     this.user = JSON.parse($window.sessionStorage.user);
-                    this.isAdmin = $window.sessionStorage.isAdmin;
+                    this.isAdmin = JSON.parse($window.sessionStorage.isAdmin);
                     this.isLogged = true;
                 }
             },
-            create: function (data) {
+            create: function(data) {
                 this.user = data.user;
                 this.isLogged = true;
                 this.isAdmin = data.user.isAdmin;
@@ -45,7 +45,7 @@ angular.module('iTrakApp')
 
             },
 
-            destroy: function () {
+            destroy: function() {
                 this.isLogged = false;
 
                 delete this.user;
@@ -57,27 +57,52 @@ angular.module('iTrakApp')
             }
         }
     })
-    .factory('TokenInterceptor', function ($q, $window) {
+    .factory('TokenInterceptor', function($q, $window, $injector) {
         return {
-            request: function (config) {
+            request: function(config) {
                 config.headers = config.headers || {};
                 if ($window.sessionStorage.token) {
                     config.headers['authorization'] = $window.sessionStorage.token;
-                    config.headers['X-Key'] = $window.sessionStorage.user;
+                    config.headers['X-Key'] = $window.sessionStorage.user._id;
                     config.headers['Content-Type'] = "application/json";
                 }
                 return config || $q.when(config);
             },
 
-            response: function (response) {
+            response: function(response) {
                 return response || $q.when(response);
             },
 
-            responseError: function (response) {
+            responseError: function(response) {
                 if (response.status === 401 || response.status === 403) {
-                    $location.path('/signin');
+                    var Auth = $injector.get('Auth');
+                    Auth.logout();
                 }
                 return $q.reject(response);
+            }
+        };
+    })
+    .factory('socket', function($rootScope) {
+        var socket = io.connect();
+        console.log("socket connected " + socket)
+        return {
+            on: function(eventName, callback) {
+                socket.on(eventName, function() {
+                    var args = arguments;
+                    $rootScope.$apply(function() {
+                        callback.apply(socket, args);
+                    });
+                });
+            },
+            emit: function(eventName, data, callback) {
+                socket.emit(eventName, data, function() {
+                    var args = arguments;
+                    $rootScope.$apply(function() {
+                        if (callback) {
+                            callback.apply(socket, args);
+                        }
+                    });
+                })
             }
         };
     });

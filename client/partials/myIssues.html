@@ -1,0 +1,118 @@
+<div>
+    <md-card>
+        <md-data-table-toolbar ng-hide="selected.length || filter.show">
+            <h2 class="md-title">My Issues</h2>
+            <div flex=""></div>
+            <md-button class="md-icon-button md-button" aria-label="Search" ng-click="filter.show = true">
+                <ng-md-icon icon="search"></ng-md-icon>
+            </md-button>
+            <md-button class="md-icon-button md-button" aria-label="Add Project" ng-click="openAddDialog($event)">
+                <ng-md-icon icon="person_add"></ng-md-icon>
+            </md-button>
+        </md-data-table-toolbar>
+
+        <md-data-table-toolbar ng-show="filter.show && !selected.length" aria-hidden="true" class="ng-hide" style="">
+            <ng-md-icon icon="search"></ng-md-icon>
+            <form flex name="filter.form">
+                <md-input-container>
+                    <label>Search</label>
+                    <input ng-model="query.filter" ng-model-options="filter.options">
+                </md-input-container>
+            </form>
+            <md-button class="md-icon-button" ng-click="removeFilter()" aria-label="Close search">
+                <ng-md-icon icon="close"></ng-md-icon>
+            </md-button>
+        </md-data-table-toolbar>
+
+        <md-data-table-toolbar class="md-primary" ng-show="selected.length" layout-align="space-between">
+            <div>{{selected.length}} {{selected.length > 1 ? 'items' : 'item'}} selected</div>
+            <div flex=""></div>
+            <md-button class="md-icon-button" ng-click="editIssue($event)" aria-label="Edit Project" ng-show="selected.length === 1">
+                <ng-md-icon icon="edit"></ng-md-icon>
+            </md-button>
+            <md-button class="md-icon-button" ng-click="deleteIssue($event)" aria-label="Delete Project">
+                <ng-md-icon icon="delete"></ng-md-icon>
+            </md-button>
+        </md-data-table-toolbar>
+
+        <md-data-table-container>
+            <table md-data-table md-row-select="selected">
+                <thead md-order="order">
+                    <tr>
+                        <th name="Issue Name" order-by="name"></th>
+                        <th name="Description" order-by="description"></th>
+                        <th name="Status" order-by="status"></th>
+                        <th name="Priority" order-by="priority"></th>
+                        <th name="Owner" order-by="owner"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr md-auto-select ng-repeat="issue in issues | orderBy: order">
+                        <td>{{issue.name}}</td>
+                        <td>{{issue.description}}</td>
+                        <td>{{issue.status}}</td>
+                        <td>{{issue.priority}}</td>
+                        <td>{{issue.owner.firstName + ' ' + issue.owner.lastName}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </md-data-table-container>
+    </md-card>
+</div>
+
+<script type="text/html" id="addIssueDialogHTML">
+    <md-dialog aria-label="Add dialog">
+        <md-dialog-content>
+            <form name="issueForm">
+                <div layout layout-sm="column">
+                    <md-input-container flex>
+                        <label>Project</label>
+                        <input ng-model="issue.project" disabled>
+                    </md-input-container>
+                    <md-input-container flex>
+                        <label>Owner</label>
+                        <input ng-model="issue.owner" disabled>
+                    </md-input-container>
+                </div>
+
+                <md-input-container flex>
+                    <label>Issue</label>
+                    <input ng-model="issue.name" ng-required="true">
+                </md-input-container>
+
+                <md-input-container flex>
+                    <label>Description</label>
+                    <textarea ng-model="issue.description" columns="1" md-maxlength="150" ng-required="true"></textarea>
+                </md-input-container>
+
+                <div layout layout-sm="column">
+                    <md-input-container flex>
+                        <md-select ng-model="issue.status" style="min-width: 200px;" placeholder="Status">
+                            <md-option ng-repeat="status in statuses" ng-value="status">{{status}}</md-option>
+                        </md-select>
+                    </md-input-container>
+                    <md-input-container flex>
+                        <md-select ng-model="issue.priority" style="min-width: 200px;" placeholder="Priority">
+                            <md-option ng-repeat="priority in priorities" ng-value="priority">{{priority}}</md-option>
+                        </md-select>
+                    </md-input-container>
+                </div>
+
+                <md-input-container flex>
+                    <md-select ng-model="issue.assignedTo" md-on-open="loadUsers()" style="min-width: 200px;" placeholder="Assigned To">
+                        <md-option ng-repeat="user in users" ng-value="user._id">{{user.firstName + ' ' + user.lastname}}</md-option>
+                    </md-select>
+                </md-input-container>
+
+            </form>
+        </md-dialog-content>
+        <div class="md-actions">
+            <md-button ng-click="saveIssue()" class="md-primary">
+                Save
+            </md-button>
+            <md-button ng-click="closeDialog()" class="md-primary">
+                Cancel
+            </md-button>
+        </div>
+    </md-dialog>
+</script>

@@ -1,0 +1,7 @@
+    <div ui-view="sideNav" layout="column" class="md-whiteframe-z2"></div>
+    <div layout="column" flex>
+        <div class="slide-animate" ui-view="header"></div>
+        <div ui-view layout="column" layout-padding flex>
+            <h1>Hello {{ user.firstName }} {{ user.lastName }}</h1>
+        </div>
+    </div>

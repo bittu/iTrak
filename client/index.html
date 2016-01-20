@@ -9,30 +9,43 @@
     <meta name="description" content="">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
 
-    <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Roboto:400,500,700,400italic'>
+    <link rel='stylesheet' href='//fonts.googleapis.com/css?family=Roboto:400,500,700,400italic'>
     <link rel="stylesheet" href="./libs/angular-material/angular-material.css" />
+    <link rel='stylesheet' href='./libs/angular-loading-bar/build/loading-bar.min.css'/>
+    <link rel='stylesheet' href='./libs/angular-material-data-table/dist/md-data-table.min.css'/>
+    
     <link rel="stylesheet" href="./css/style.css" />
 </head>
 
-<body layout="fill" flex>
+<body layout="column">
 
-    <div ui-view md-scroll-y flex layout-fill></div>
+    <div ui-view layout="row" flex></div>
 
     <script src="./libs/angular/angular.js"></script>
-    <script src="./libs/angular-route/angular-route.js"></script>
+    <!--<script src="./libs/angular-route/angular-route.js"></script>-->
     <script src="./libs/angular-ui-router/release/angular-ui-router.js"></script>
     <script src="./libs/angular-animate/angular-animate.js"></script>
     <script src="./libs/angular-aria/angular-aria.js"></script>
-    <script type="text/javascript" src="./libs/angular-material/angular-material.js"></script>
-    <script type="text/javascript" src="./libs/angular-material-icons/angular-material-icons.js"></script>
+    <script src="./libs/angular-material/angular-material.js"></script>
+    <script src="./libs/angular-material-icons/angular-material-icons.js"></script>
+    <script src='./libs/angular-loading-bar/build/loading-bar.min.js'></script>
+    <script src='./libs/angular-material-data-table/dist/md-data-table.min.js'></script>
+    <!--<script src='./libs/angular-socket-io/socket.min.js'></script>-->
+    <script src='./libs/socket.io-client/socket.io.js'></script>
 
     <script src="./js/app.js"></script>
+    <script src='./js/directives/mdTable.js'></script>
     <script src="./js/controllers/loginCtrl.js"></script>
     <script src="./js/controllers/sideNavCtrl.js"></script>
+    <script src="./js/controllers/headerCtrl.js"></script>
     <script src="./js/controllers/adminCtrl.js"></script>
     <script src="./js/controllers/dashboardCtrl.js"></script>
     <script src="./js/services/Auth.js"></script>
     <script src="./js/services/Constants.js"></script>
+    <script src="./js/services/UserService.js"></script>
+    <script src="./js/services/ProjectService.js"></script>
+    <script src="./js/services/IssueService.js"></script>
+    
 </body>
 
 </html>

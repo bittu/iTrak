@@ -1,9 +1,107 @@
-<section layout="row" flex>
-    <section class="slide-animate" ng-include="'partials/sideNav.html'" layout="column"></section>
-    <md-content flex layout-fill>
-        <div class="slide-animate" ng-include="'partials/header.html'"></div>
-        <div layout="column" layout-padding layout-fill layout-align="top center">
+<div>
+    <md-card>
+        <md-data-table-toolbar ng-hide="selected.length || filter.show">
+            <h2 class="md-title">Users</h2>
+            <div flex=""></div>
+            <md-button class="md-icon-button md-button" aria-label="Search" ng-click="filter.show = true">
+                <ng-md-icon icon="search"></ng-md-icon>
+            </md-button>
+            <md-button class="md-icon-button md-button" aria-label="Add User" ng-click="openAddDialog($event)">
+                <ng-md-icon icon="person_add"></ng-md-icon>
+            </md-button>
+        </md-data-table-toolbar>
 
+        <md-data-table-toolbar ng-show="filter.show && !selected.length" aria-hidden="true" class="ng-hide" style="">
+            <ng-md-icon icon="search"></ng-md-icon>
+            <form flex name="filter.form">
+                <md-input-container>
+                    <label>Search</label>
+                    <input ng-model="query.filter" ng-model-options="filter.options">
+                </md-input-container>
+            </form>
+            <md-button class="md-icon-button" ng-click="removeFilter()" aria-label="Close search">
+                <ng-md-icon icon="close"></ng-md-icon>
+            </md-button>
+        </md-data-table-toolbar>
+
+        <md-data-table-toolbar class="md-primary" ng-show="selected.length" layout-align="space-between">
+            <div>{{selected.length}} {{selected.length > 1 ? 'items' : 'item'}} selected</div>
+            <div flex=""></div>
+            <md-button class="md-icon-button" ng-click="editUser($event)" aria-label="Edit User" ng-show="selected.length === 1">
+                <ng-md-icon icon="edit"></ng-md-icon>
+            </md-button>
+            <md-button class="md-icon-button" ng-click="deleteUser($event)" aria-label="Delete User">
+                <ng-md-icon icon="delete"></ng-md-icon>
+            </md-button>
+        </md-data-table-toolbar>
+
+        <md-data-table-container>
+            <table md-data-table md-row-select="selected">
+                <thead md-order="order">
+                    <tr>
+                        <th name="User Id" order-by="userId"></th>
+                        <th name="First Name" order-by="firstName"></th>
+                        <th name="Last Name" order-by="lastName"></th>
+                        <th name="Email" order-by="email"></th>
+                        <th name="D.O.B" order-by="dob"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr md-auto-select ng-repeat="user in users | orderBy: order">
+                        <td>{{user.userId}}</td>
+                        <td>{{user.firstName}}</td>
+                        <td>{{user.lastName}}</td>
+                        <td>{{user.email}}</td>
+                        <td>{{user.dob | date: 'dd.MM.yyyy'}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </md-data-table-container>
+    </md-card>
+</div>
+
+<script type="text/html" id="addUserDialogHTML">
+    <md-dialog aria-label="Add dialog">
+        <md-dialog-content>
+            <form name="userForm">
+                <md-input-container flex>
+                    <label>User Id</label>
+                    <input ng-model="user.userId" ng-required="true">
+                </md-input-container>
+
+                <div layout layout-sm="column">
+                    <md-input-container flex>
+                        <label>First Name</label>
+                        <input ng-model="user.firstName" ng-required="true">
+                    </md-input-container>
+                    <md-input-container flex>
+                        <label>Last Name</label>
+                        <input ng-model="user.lastName" ng-required="true">
+                    </md-input-container>
+                </div>
+
+                <div layout layout-sm="column">
+                    <md-input-container flex>
+                        <label>Email</label>
+                        <input ng-model="user.email" ng-required="true">
+                    </md-input-container>
+                    <md-input-container flex>
+                        <label>D . O . B</label>
+                        <input type="date" ng-model="user.dob" ng-required="true">
+                    </md-input-container>
+                </div>
+                <md-select ng-model="user.projects" md-on-open="loadProjects()" style="min-width: 200px;" placeholder="Project">
+                    <md-option ng-repeat="project in projects" ng-value="project">{{project.projectName}}</md-option>
+                </md-select>
+            </form>
+        </md-dialog-content>
+        <div class="md-actions">
+            <md-button ng-click="saveUser()" class="md-primary">
+                Save
+            </md-button>
+            <md-button ng-click="closeDialog()" class="md-primary">
+                Cancel
+            </md-button>
         </div>
-    </md-content>
-</section>
+    </md-dialog>
+</script>

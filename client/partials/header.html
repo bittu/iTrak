@@ -1,12 +1,28 @@
-<md-toolbar>
+<md-toolbar layout="row">
     <div class="md-toolbar-tools">
         <md-button ng-click="toggleSidenav('left')" hide-gt-md aria-label="Menu" class="md-icon-button">
             <ng-md-icon icon="menu"></ng-md-icon>
         </md-button>
         <h3>{{ headerText }}</h3>
         <span flex></span>
-        <md-button aria-label="Open Settings" ng-click="showListBottomSheet($event)" class="md-icon-button">
-            <ng-md-icon icon="more_vert"></ng-md-icon>
-        </md-button>
+        <md-menu>
+            <md-button aria-label="Open Settings" ng-click="$mdOpenMenu()" class="md-icon-button">
+                <ng-md-icon icon="more_vert"></ng-md-icon>
+            </md-button>
+            <md-menu-content width="4">
+                <md-menu-item>
+                  <md-button ng-click="">
+                    <ng-md-icon icon="info"></ng-md-icon>
+                    Profile
+                  </md-button>
+                </md-menu-item>
+                <md-menu-item>
+                  <md-button ng-click="logout($event)">
+                    <ng-md-icon icon="logout"></ng-md-icon>
+                    Logout
+                  </md-button>
+                </md-menu-item>
+            </md-menu-content>
+        </md-menu>
     </div>
 </md-toolbar>

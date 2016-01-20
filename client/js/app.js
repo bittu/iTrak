@@ -104,8 +104,11 @@ angular.module('iTrakApp', ['ngRoute', 'ngMaterial', 'ngMdIcons'])
         });
 }); */
 
-angular.module('iTrakApp', ['ngRoute', 'ngMaterial', 'ngMdIcons', 'ui.router'])
+angular.module('iTrakApp', ['ngMaterial', 'ngMdIcons', 'ui.router', 'angular-loading-bar', 'ngAnimate', 'md.data.table'])
     .config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
+        
+        $httpProvider.interceptors.push('TokenInterceptor');
+        
         $urlRouterProvider.otherwise('/login');
 
         $stateProvider
@@ -116,13 +119,19 @@ angular.module('iTrakApp', ['ngRoute', 'ngMaterial', 'ngMdIcons', 'ui.router'])
             })
 
         .state('adminDashboard', {
-            url: '/:id/adminDashboard',
-            templateUrl: 'partials/adminDashboard.html',
-            controller: 'adminDashboardCtrl',
+            url: '/:id/admin',
             views: {
                 'sideNav@adminDashboard': {
                     templateUrl: 'partials/sideNav.html',
                     controller: 'sideNavCtrl'
+                },
+                '': {
+                    templateUrl: 'partials/adminDashboard.html',
+                    controller: 'adminDashboardCtrl'
+                },
+                'header@adminDashboard': {
+                    templateUrl: 'partials/header.html',
+                    controller: 'headerCtrl'
                 }
             },
             data: {
@@ -131,7 +140,7 @@ angular.module('iTrakApp', ['ngRoute', 'ngMaterial', 'ngMdIcons', 'ui.router'])
             }
         })
             .state('adminDashboard.users', {
-                url: '/:id/usersAdmin',
+                url: '/users',
                 templateUrl: 'partials/usersAdmin.html',
                 controller: 'usersAdminCtrl',
                 data: {
@@ -140,7 +149,7 @@ angular.module('iTrakApp', ['ngRoute', 'ngMaterial', 'ngMdIcons', 'ui.router'])
                 }
             })
             .state('adminDashboard.projects', {
-                url: '/:id/projectsAdmin',
+                url: '/projects',
                 templateUrl: 'partials/projectsAdmin.html',
                 controller: 'projectsAdminCtrl',
                 data: {
@@ -148,16 +157,46 @@ angular.module('iTrakApp', ['ngRoute', 'ngMaterial', 'ngMdIcons', 'ui.router'])
                     admin: true
                 }
             })
-
+            
         .state('dashboard', {
             url: '/:id/dashboard',
-            templateUrl: 'partials/dashboard.html',
-            controller: 'dashboardCtrl',
+            views: {
+                'sideNav@dashboard': {
+                    templateUrl: 'partials/sideNav.html',
+                    controller: 'sideNavCtrl'
+                },
+                '': {
+                    templateUrl: 'partials/dashboard.html',
+                    controller: 'dashboardCtrl'
+                },
+                'header@dashboard': {
+                    templateUrl: 'partials/header.html',
+                    controller: 'headerCtrl'
+                }
+            },
             data: {
                 login: true,
                 admin: false
             }
         })
+            .state('dashboard.assignedIssues', {
+                url: '/myIssues',
+                templateUrl: 'partials/myIssues.html',
+                controller: 'myIssuesCtrl',
+                data: {
+                    login: true,
+                    admin: false
+                }
+            })
+            .state('dashboard.openIssues', {
+                url: '/openIssues',
+                templateUrl: 'partials/openIssues.html',
+                controller: 'openIssuesCtrl',
+                data: {
+                    login: true,
+                    admin: false
+                }
+            })
     })
 
 .run(function ($rootScope, $state, Session) {
@@ -173,8 +212,6 @@ angular.module('iTrakApp', ['ngRoute', 'ngMaterial', 'ngMdIcons', 'ui.router'])
                     event.preventDefault();
                     $state.go('adminDashboard', {
                         id: Session.user._id
-                    }, {
-                        location: true
                     });
                 } else {
                     event.preventDefault();

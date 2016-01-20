@@ -10,7 +10,7 @@ var TOKEN_EXPIRATION = 60,
 
 
 var auth = {
-    login: function (req, res) {
+    login: function(req, res) {
         var userId = req.body.userId || '',
             password = req.body.password || '';
         console.log(req.body);
@@ -24,9 +24,12 @@ var auth = {
             return;
         }
 
-        User.findOne({
+        var query = User.findOne({
             userId: userId
-        }, function (err, user) {
+        });
+        query.populate('projects');
+
+        query.exec(function(err, user) {
             if (err) {
                 console.log(err);
                 return res.send(401);
@@ -50,11 +53,13 @@ var auth = {
                 return;
             }
             */
-            user.comparePassword(password, function (isMatch) {
+            user.comparePassword(password, function(isMatch) {
                 if (!isMatch) {
                     console.log("Attempt failed to login with " + user.username);
                     return res.send(401);
                 }
+
+                delete user.password;
 
                 /*var token = jwt.sign({
                     user: user._id
@@ -73,34 +78,25 @@ var auth = {
         });
     },
 
-    logout: function (req, res) {
+    logout: function(req, res) {
         // invalidate the token
         var token = req.headers.authorization;
         console.log(' >>> ', token)
-        jwt.verify(token, secret.secretToken, function (err, decoded) {
-            if (err) {
-                res.status(401);
-                res.json({
-                    "status": 401,
-                    "message": "Invalid token"
-                });
-                return;
-            }
+        var decoded = jwt.decode(token);
 
-            // asynchronously read and invalidate
-            db.get(decoded.auth, function (err, record) {
-                var updated = JSON.parse(record);
-                updated.valid = false;
-                db.put(decoded.auth, updated, function (err) {
-                    console.log('updated: ', updated)
-                    return res.status(200).json({
-                        "message": "Logged out!!"
-                    });
+        db.get(decoded.auth, function(err, record) {
+            var updated = JSON.parse(record);
+            updated.valid = false;
+            db.put(decoded.auth, updated, function(err) {
+                console.log('updated: ', updated)
+                return res.status(200).json({
+                    "message": "Logged out!!"
                 });
             });
         });
     }
 }
+
 
 function generateGUID() {
     return crypto.randomBytes(Math.ceil(GUID_LENGTH * 3 / 4))
@@ -131,7 +127,7 @@ function generateAndStoreToken(req, user) {
     };
     console.log(db)
 
-    db.put(GUID, JSON.stringify(record), function (err) {
+    db.put(GUID, JSON.stringify(record), function(err) {
         if (err) {
             console.log(err);
         }

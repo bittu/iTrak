@@ -3,7 +3,8 @@ var express = require('express'),
 
 var auth = require('../controllers/auth'),
     users = require('../controllers/users'),
-    projects = require('../controllers/projects');
+    projects = require('../controllers/projects'),
+    issues = require('../controllers/issues');
 
 //Auth
 router.post('/login', auth.login);
@@ -27,5 +28,10 @@ router.post('/api/admin/projects', projects.create);
 router.put('/api/admin/projects/:id', projects.update);
 router.delete('/api/admin/projects/:id', projects.delete);
 
+//Issues
+router.get('/api/project/:projectId/issues/:userId', issues.getMyIssues);
+router.get('/api/project/:projectId/issues', issues.getAllOpenProjectIssues);
+router.post('/api/project/:projectId/issues', issues.create);
+router.get('/api/project/:projectId/users', users.getAllUsersForProject);
 
 module.exports = router;

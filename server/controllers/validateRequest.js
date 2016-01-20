@@ -10,7 +10,7 @@ module.exports = function (req, res, next) {
 
     jwt.verify(token, secret.secretToken, function (err, decoded) {
         if (err) {
-            return res.json(400, err.message);
+            return res.json(401, err.message);
         }
         console.log(decoded)
         if (!decoded || !decoded.auth) {

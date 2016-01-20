@@ -17,7 +17,7 @@ angular.module('iTrakApp')
                         $window.sessionStorage.user = JSON.stringify(data.user); // to fetch the user details on refresh
                         $window.sessionStorage.isAdmin = data.user.isAdmin; // to fetch the user details on refresh
 
-                        $state.go('login');
+                        $state.go($state.current, {}, {reload: true}); 
 
                     }).error(function (status) {
                         alert('Oops something went wrong!');

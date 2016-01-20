@@ -1,19 +1,27 @@
-<md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')"ng-controller="sideNavCtrl as sideNav">
+<md-sidenav class="md-sidenav-left" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')">
     <md-toolbar class="md-theme-indigo">
-        <div layout="column" class="md-toolbar-tools md-toolbar-tools-bottom">
+        <div class="md-toolbar-tools md-toolbar-tools-bottom">
             <user-avatar></user-avatar>
             <span></span>
             <div>{{ user.firstName }} {{ user.lastName }}</div>
             <div>{{ user.email }}</div>
         </div>
     </md-toolbar>
-    <md-content flex role="navigation" class="side-nav-menu">
+    <md-content role="navigation" class="side-nav-menu" layout="column" flex>
+        <md-input-container ng-if="!user.isAdmin" flex>
+            <md-select ng-model="selectedProject" placeholder="Select a project">
+                <md-option ng-repeat="project in user.projects" value="{{project._id}}">{{project.projectName}}</md-option>
+            </md-select>
+        </md-input-container>
         <ul>
             <li ng-repeat="item in menu">
                 <md-button ng-click="changeView(item.view)">
-                    <ng-md-icon icon="{{item.icon}}"></ng-md-icon>
+                    <div class="ngMdIconList">
+                        <ng-md-icon icon="{{item.icon}}"></ng-md-icon>
+                    </div>
                     {{item.title}}
                 </md-button>
+                <md-divider ng-if="!$last"></md-divider>
             </li>
         </ul>
     </md-content>

@@ -69,7 +69,7 @@ var projects = {
 
         Project.update({
             _id: id
-        }, projectUpdate, function (err, count, project) {
+        }, projectUpdate, function (err, count) {
             if (err) {
                 console.log(err);
                 return res.send(400, 'Error udpating project: ' + project.projectName);
@@ -95,9 +95,9 @@ var projects = {
                 console.log(err);
                 return res.send(400);
             }
-            if (user) {
+            if (project) {
                 project.remove();
-                return res.send(200, 'Project deleted');
+                return res.send(200, 'Project ' + project.projectName + ' is deleted !!!');
             }
 
             return res.send(400);

@@ -15,6 +15,11 @@ Issue tracker done with MEAN stack
 * http://stackoverflow.com/questions/28518181/angular-ui-router-how-to-prevent-access-to-a-state
 * https://github.com/alarv/ng-login
 * http://jonsamwell.com/url-route-authorization-and-security-in-angular/
+* https://github.com/chieffancypants/angular-loading-bar
+* https://github.com/daniel-nagy/md-data-table
+* http://codepen.io/jbltx/pen/WbdRRb
+* http://stackoverflow.com/questions/26739167/jwt-json-web-token-automatic-prolongation-of-expiration
+* http://victorbjelkholm.github.io/ngProgress/
 
 Admin:
 

@@ -178,8 +178,8 @@ var users = {
                 return res.send(400, 'Old password did not match');
             }
 
-            user.password = password.newPassword;
-            userUpdate.updated = Date.now();
+            user.password = passwords.newPassword;
+            user.updated = Date.now();
 
             user.save(function (err) {
                 if (err) {
@@ -210,6 +210,30 @@ var users = {
 
             return res.json(200, user);
         });
+    },
+    
+    getAllUsersForProject: function(req, res) {
+        var projectId = req.params.projectId || '';
+        if(projectId === '') {
+            return res.send(400);
+        }
+        
+        var query = User.find({
+            projects: projectId
+        });
+        
+        query.sort('userId');
+        query.select('-password');
+        
+        query.exec(function (err, users) {
+            if (err) {
+                console.log(err);
+                return res.send(400);
+            }
+
+            return res.json(200, users);
+        });
+        
     }
 }
 
