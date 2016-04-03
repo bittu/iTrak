@@ -30,7 +30,7 @@
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.13.2",
-    "express": "^4.13.1",
+    "express": "latest",
     "jsonwebtoken": "^5.0.2",
     "level": "^1.2.0",
     "mongoose": "^4.0.7",

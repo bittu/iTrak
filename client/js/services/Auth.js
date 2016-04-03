@@ -85,6 +85,7 @@ angular.module('iTrakApp')
     .factory('socket', function($rootScope) {
         var socket = io.connect();
         console.log("socket connected " + socket)
+        console.log(socket)
         return {
             on: function(eventName, callback) {
                 socket.on(eventName, function() {
